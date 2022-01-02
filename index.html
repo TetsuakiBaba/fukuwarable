@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script> -->
+    <script src="./camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+
+    <script src="./p5.min.js"></script>
+    <script src="./p5.sound.min.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <title>Fukuwarable</title>
+    <script type="text/javascript">
+
+        //some mysterious code to get device ids
+        navigator.mediaDevices.enumerateDevices()
+            .then(function (devices) {
+                devices.forEach(function (device) {
+                    console.log(device.kind + ": " + device.label +
+                        " id = " + device.deviceId);
+                });
+            })
+            .catch(function (err) {
+                console.log(err.name + ": " + err.message);
+            });
+    </script>
+
+    <style>
+        body {
+            font-family: 'Kaisei Tokumin', serif;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container-sm">
+        <div class="row mt-4 mb-1">
+            <div class="col-12">
+                <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#collapseExample" role="button"
+                    aria-expanded="false" aria-controls="collapseExample">
+                    使い方
+                </a>
+
+                <button type="button" class="btn btn-outline-danger" value="もう一度"
+                    onclick="window.location.reload();">もう一度</button>
+
+                <button type="button" class="btn btn-outline-success" value="もう一度" onclick="download();" disabled
+                    id="button_download">画像をダウンロード</button>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="collapse" id="collapseExample">
+                    <div class="card card-body">
+                        <h5>1人で遊ぶ</h5>
+                        <p>
+                            スピーカの音量を上げ、音声ガイドに従い操作してください。この他マウスカーソルが顔台座の上や、スクリーン上にある時で音の高低が変わるので音情報を頼りにうまく操作してみましょう。
+                        </p>
+                        <h5>2人以上で遊ぶ</h5>
+                        <p>
+                            周りの人に各パーツの位置を教えてもらい、うまく顔を作ってみましょう。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-0 mb-1">
+            <div class="col-12">
+                <span class="badge bg-danger">Chromeブラウザのみ動作</span>
+                <span class="badge bg-danger">macbook推奨</span>
+            </div>
+        </div>
+
+        <div class="row mt-1 mb-1">
+            <div class="col-12">
+                <!-- <video class="input_video" hidden></video> -->
+                <div id="canvas_placeholder">
+
+                </div>
+                <!-- <canvas class="output_canvas" width="1280px" height="720px"></canvas> -->
+            </div>
+        </div>
+        <footer class="text-align:center;">
+            <hr>
+            <p class="text-muted small text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                </svg>
+                &copy; 2022 Tetsuaki BABA
+            </p>
+        </footer>
+    </div>
+
+
+    <script src="./myfacemesh.js"></script>
+    <script src="./FaceObject.js"></script>
+    <script src="./utils.js"></script>
+    <script src="./p5.speech.js"></script>
+    <script src="./sketch.js"></script>
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    -->
+</body>
+
+</html>
